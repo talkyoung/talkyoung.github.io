@@ -1,0 +1,14 @@
+cn\sjxy\overdue\dao\LogdetailMapper.class
+cn\sjxy\overdue\dao\StudyprocessMapper.class
+cn\sjxy\overdue\dao\SecretaryMapper.class
+cn\sjxy\overdue\dao\DepartmentMapper.class
+cn\sjxy\overdue\dao\TeaassignMapper.class
+cn\sjxy\overdue\dao\ProfessionMapper.class
+cn\sjxy\overdue\dao\Test.class
+cn\sjxy\overdue\dao\FileMapper.class
+cn\sjxy\overdue\dao\TeacherMapper.class
+cn\sjxy\overdue\dao\PictureMapper.class
+cn\sjxy\overdue\dao\CourseMapper.class
+cn\sjxy\overdue\dao\CommentsMapper.class
+cn\sjxy\overdue\dao\VideoMapper.class
+cn\sjxy\overdue\dao\StudentMapper.class

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>管理</title>
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="../plugins/angularjs/angular.min.js"></script>
+
+    <script type="text/javascript" src="../js/base.js"></script>
+    <script type="text/javascript" src="../js/service/teacherService.js"></script>
+    <script type="text/javascript" src="../js/service/courseService.js"></script>
+    <script type="text/javascript" src="../js/controller/baseController.js"></script>
+    <script type="text/javascript" src="../js/controller/teacherController.js"></script>
+    <script type="text/javascript" src="../js/controller/courseController.js"></script>
+
+</head>
+<body class="hold-transition skin-red sidebar-mini" ng-app="overdue" ng-controller="courseController"
+      ng-init="findAllCourse()">
+
+<table class="table dataTable">
+    <thead>
+    <th style="font-size: 17px;text-align: center">课程名称</th>
+    <th style="font-size: 17px;text-align: center">以下教师负责<span style="color: red"> [ {{couName}} ]</span>课程</th>
+    <th style="font-size: 17px;text-align: center">以下学生课程未通过测试</th>
+    </thead>
+    <tbody>
+    <tr style="text-align: center">
+        <td style="width: 33%">
+            <table class="table table-hover">
+                <tr ng-repeat="course in courseList" style="text-align: center">
+                    <td>
+                        <button type="button" class="btn btn-link" style="font-size: 15px"
+                                ng-click="showTeacher(course.couId);showStudent(course.couId);pushCouName(course.couName,course.couId)">
+                            {{course.couName}}
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td style="width: 33%">
+            <table class="table table-hover">
+                <!--<tr ng-if="couId == null" style="text-align: center">
+                    <td style="text-align: center">
+                        {{warnTeacher}}
+                    </td>
+                </tr>-->
+                <tr ng-repeat="teacher in teacherIdList" style="text-align: center">
+                    <td>
+                        <button type="button" class="btn btn-link" style="font-size: 15px"
+                                ng-click="toNameTeaId(teacher.teaId,teacher.teaName)">
+                            {{teacher.teaName}}
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td style="width: 33%" ng-if="studentList.length == 0">
+            选修该课程的学生已分配完毕。
+        </td>
+        <td style="width: 33%" ng-if="studentList.length != 0">
+            <table class="table table-hover">
+                <thead>
+                <th style="width: 33%;text-align: center">学生姓名</th>
+                <th style="width: 33%;text-align: center">专业名称</th>
+                <th style="width: 33%;text-align: center">课程名称</th>
+                </thead>
+                <tbody>
+                <tr ng-repeat="student in studentList track by $index" style="text-align: center">
+                    <td>
+                        <button type="button" class="btn btn-link" style="font-size: 15px"
+                                ng-click="pushStuId(student.stuId,student.stuName)">
+                            {{student.stuName}}
+                        </button>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-link" style="font-size: 15px"
+                                ng-click="pushStuId(student.stuId,student.stuName)">
+                            {{student.stuProfessionId}}
+                        </button>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-link" style="font-size: 15px"
+                                ng-click="pushStuId(student.stuId,student.stuName)">
+                            {{couName}}
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr/>
+<!--<div>
+    <select>
+        <option data-ng-model="{{teacherName}}" ng-repeat="teacher in teacherIdList" value="{{teacher.teaName}}">{{teacher.teaName}}</option>
+    </select>
+    <select data-ng-model="{{teacherName}}" ng-options="teacher.teaName as teacher.teaName teacher in teacherIdList">{{teacher.teaName}}</select>
+</div>-->
+<div style="text-align: center">
+    <button type="button" ng-click="assignTask(teacherId,couId,studentId)" style="font-size: 20px;color: black"
+            class="btn btn-link">
+        <span ng-if="teacherId == null" style="color: red;font-weight: bold">
+            请选择一位教师
+        </span>
+        <span ng-if="teacherId != null">
+            分配<span style="color: red">[ {{teacherName}} ]</span>教师
+            <span ng-if="studentId == null" style="color: red;font-weight: bold">
+                请选择一名学生
+            </span>
+            <span ng-if="studentId != null" style="color: red;font-weight: bold">
+                负责<span style="color: red">[ {{studentName}} ]</span>学生
+            </span>
+        </span>
+    </button>
+</div>
+<br/>
+<table class="table" style="text-align: center">
+    <thead>
+    <th style="text-align: center">课程</th>
+    <th style="text-align: center">教师</th>
+    <th style="text-align: center">学生</th>
+    <th style="text-align: center">点击分配任务</th>
+    </thead>
+    <tbody>
+    <tr>
+        <td style="width: 28%;font-size: 17px">
+            <button type="button" class="btn btn-link" style="font-size: 15px;color: black">
+                为课程<span style="color:red;"> {{couName}} </span>分配任务
+            </button>
+            <!--为课程<span style="color:red;">
+                <label>
+                    <select>
+                        <option ng-click="pushCouName(course.couName,course.couId)" ng-repeat="course in courseList" ng-model="couId" value="{{course.couId}}">
+                            {{course.couName}}
+                        </option>
+                    </select>
+
+                </label>
+            </span>分配任务-->
+        </td>
+        <td style="text-align: center;width: 25%">
+            <table class="table table-hover">
+                <tr ng-repeat="teacher in teacherIdList">
+                    <td>
+                        <button type="button" class="btn btn-link" style="font-size: 15px"
+                                ng-click="toNameTeaId(teacher.teaId,teacher.teaName)" >
+                            为<span style="color:red;"> {{teacher.teaName}} </span>教师分配任务
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td style="width: 28%" ng-if="studentList.length == 0">
+            选修该课程的学生已分配完毕。
+        </td>
+        <td style="width: 28%" ng-if="studentList.length != 0">
+            <table class="table table-hover">
+                <tr ng-repeat="student in studentList track by $index">
+                    <td>
+                        <button type="button" class="btn btn-link" style="font-size: 15px"
+                                ng-click="pushStuId(student.stuId,student.stuName)">
+                            分配<span style="color:red;"> {{student.stuName}} </span>同学
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td style="text-align: center;width: 16%">
+            <button type="button" ng-click="assignTask(teacherId,couId,studentId)"
+                    style="font-size: 20px;color: black;font-weight: bold"
+                    class="btn btn-default">
+                分配任务
+            </button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <http pattern="/secretary_login.jsp" security="none"/>
+    <http pattern="/student_login.jsp" security="none"/>
+    <http pattern="/teacher_login.jsp" security="none"/>
+    <http pattern="/css/**" security="none"/>
+    <http pattern="/images/**" security="none"/>
+    <http pattern="/js/**" security="none"/>
+    <http pattern="/plugins/**" security="none"/>
+    <http authentication-manager-ref="secretaryAuthenticationManager" use-expressions="true" pattern="/**">
+        <form-login login-processing-url="/secretary/spring_security_secretaryLogin" login-page="/secretary_login.jsp"
+                    default-target-url="/jsp/main.jsp"
+                    authentication-failure-url="/secretary_login.jsp"/>
+        <csrf disabled="true"/>
+        <headers>
+            <frame-options policy="SAMEORIGIN"/>
+        </headers>
+        <logout logout-url=""/>
+        <intercept-url pattern="/**" access="hasRole('ROLE_SECRETARY')"/>
+    </http>
+    <authentication-manager id="secretaryAuthenticationManager">
+        <authentication-provider user-service-ref="secretaryDetailService">
+        </authentication-provider>
+    </authentication-manager>
+    <beans:bean id="secretaryDetailService"
+                class="cn.sjxy.overdue.service.SecretaryDetailServiceImpl">
+        <beans:property name="secretaryService" ref="secretaryService"></beans:property>
+    </beans:bean>
+    <beans:bean id="secretaryService"
+                class="cn.sjxy.overdue.service.SecretaryServiceImpl">
+    </beans:bean>
+</beans:beans>

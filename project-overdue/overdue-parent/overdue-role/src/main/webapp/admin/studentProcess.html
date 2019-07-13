@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>管理</title>
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="../plugins/angularjs/angular.min.js"></script>
+
+    <script type="text/javascript" src="../js/base.js"></script>
+    <script type="text/javascript" src="../js/service/courseService.js"></script>
+    <script type="text/javascript" src="../js/controller/baseController.js"></script>
+    <script type="text/javascript" src="../js/controller/courseController.js"></script>
+
+</head>
+<body class="hold-transition skin-red sidebar-mini" ng-app="overdue" ng-controller="courseController"
+      ng-init="findStuProcess()">
+<table class="table dataTable">
+    <thead>
+    <th style="font-size: 17px;text-align: center">学生姓名</th>
+    <th style="font-size: 17px;text-align: center">未过课程</th>
+    <th style="font-size: 17px;text-align: center">授课老师</th>
+    <th style="font-size: 17px;text-align: center">上次登录时间</th>
+    <th style="font-size: 17px;text-align: center">上次登出时间</th>
+    <th style="font-size: 17px;text-align: center">总的学习时间</th>
+    </thead>
+    <tbody>
+    <tr style="text-align: center" ng-repeat="stuProcess in stuProcessList">
+        <td>
+            <button type="button" class="btn btn-link" style="font-size: 15px">
+                {{stuProcess.student.stuName}}
+            </button>
+        </td>
+        <td>
+            <button type="button" class="btn btn-link" style="font-size: 15px">
+                {{stuProcess.student.stuCourseId}}
+            </button>
+        </td>
+        <td>
+            <button type="button" class="btn btn-link" style="font-size: 15px">
+                {{stuProcess.student.stuTeacherId}}
+            </button>
+        </td>
+        <td>
+            <button type="button" class="btn btn-link" style="font-size: 15px">
+                {{stuProcess.studyprocess.stuLogintime}}
+            </button>
+        </td>
+        <td ng-if="stuProcess.studyprocess.stuLogouttime!= null">
+            <button type="button" class="btn btn-link" style="font-size: 15px">
+                {{stuProcess.studyprocess.stuLogouttime}}
+            </button>
+        </td>
+        <td ng-if="stuProcess.studyprocess.stuLogouttime == null">
+            <button type="button" class="btn btn-link" style="font-size: 15px">
+                该学生忘记登出账号！将导致没有学习时间。
+            </button>
+        </td>
+        <td ng-if="stuProcess.studyprocess.stuLogouttime != null">
+            <button type="button" class="btn btn-link" style="font-size: 15px">
+                {{stuProcess.studyprocess.accumStudytime}}
+            </button>
+        </td>
+        <td ng-if="stuProcess.studyprocess.stuLogouttime == null">
+            <button type="button" class="btn btn-link" style="font-size: 15px">
+                无学习时间！
+            </button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

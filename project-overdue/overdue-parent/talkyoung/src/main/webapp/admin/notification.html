@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>管理</title>
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="../plugins/angularjs/angular.min.js"></script>
+
+    <!-- 分页组件开始 -->
+    <script src="../plugins/angularjs/pagination.js"></script>
+    <link rel="stylesheet" href="../plugins/angularjs/pagination.css">
+    <!-- 分页组件结束 -->
+
+    <script type="text/javascript" src="../js/base_pagination.js"></script>
+    <script type="text/javascript" src="../js/service/commentsService.js"></script>
+    <script type="text/javascript" src="../js/controller/baseController.js"></script>
+    <script type="text/javascript" src="../js/controller/commentsController.js"></script>
+    <style type="text/css">
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        .liuyan {
+            margin-top: 50px;
+            height: 1200px;
+            width: 100%;
+            border: 1px solid #EEEEEE;
+            background-color: #9cd9ee;
+            box-shadow: 5px 5px 10px #EEEEEE;
+            padding: 50px;
+        }
+
+        #user-fa {
+            display: inline-block;
+            width: 36px;
+            height: 36px;
+            border: 1px solid #EEEEEE;
+            background-color: #5171ee;
+            box-shadow: 1px 1px 5px;
+            border-radius: 18px;
+            text-align: center;
+        }
+
+        #user-fa > i {
+            font-size: 20px;
+            margin-top: 5px;
+        }
+
+        #user > a {
+            padding-top: 5px;
+            text-decoration: none;
+        }
+
+        .edit > a {
+            color: #000000;
+            margin: 2px;
+        }
+
+        .edit > a:hover {
+            color: #999999;
+            background-color: #D9EDF7;
+        }
+
+        #message {
+            width: 100%;
+            height: 100px;
+
+        }
+
+        .btn-success {
+            float: right;
+        }
+
+        .middle-out {
+            height: 150px;
+            width: 100%;
+        }
+
+        .middle {
+            height: 80px;
+            width: 100%;
+            border: 1px solid #EEEEEE;
+        }
+
+        .middle-name {
+            font-family: 宋体;
+            font-size: 18px;
+            align-content: center;
+            font-weight: bold;
+        }
+
+        .middle-date {
+            font-family: 宋体;
+            font-size: 18px;
+            margin-left: 20px;
+        }
+    </style>
+    <script>
+        function tab() {
+            document.getElementById("message").focus();
+        }
+    </script>
+</head>
+<body>
+<div style="color:#000000;font-family: 黑体;font-size:22px;text-align: center">
+    发布通知
+</div>
+<div class="container">
+    <div class="row">
+        <div class="liuyan">
+            <div id="user">
+                <span class="glyphicon glyphicon-user" style="padding-left: 20px;"></span>
+                <span href="#" id="usename">[ <span style="color: red">{{name}}</span> ]请发布你的通知</span>
+                 &nbsp;&nbsp; &nbsp;&nbsp; <span>当前对[ <span style="color: red"><select name="" id="">
+                   <option name="" id=""></option>
+            </select></span> ] 专业进行通知</span>
+            </div>
+            <div>
+                <div class="content">
+                    <input id="message" class="text-success" type="text" ng-model="textContent">
+                    <!--<textarea name="a" id="message">请在这里填写你的疑惑和回复。talkyoung万岁！</textarea>-->
+                    <button id="btn" class="btn btn-success" ng-click="sendComment(textContent,stuId)">发送</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

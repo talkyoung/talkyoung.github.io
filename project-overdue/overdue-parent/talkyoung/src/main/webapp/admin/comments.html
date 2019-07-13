@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>管理</title>
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="../plugins/angularjs/angular.min.js"></script>
+
+    <!-- 分页组件开始 -->
+    <script src="../plugins/angularjs/pagination.js"></script>
+    <link rel="stylesheet" href="../plugins/angularjs/pagination.css">
+    <!-- 分页组件结束 -->
+
+    <script type="text/javascript" src="../js/base_pagination.js"></script>
+    <script type="text/javascript" src="../js/service/commentsService.js"></script>
+    <script type="text/javascript" src="../js/service/uploadService.js"></script>
+    <script type="text/javascript" src="../js/controller/baseController.js"></script>
+    <script type="text/javascript" src="../js/controller/uploadController.js"></script>
+    <script type="text/javascript" src="../js/controller/commentsController.js"></script>
+    <style type="text/css">
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        .liuyan {
+            margin-top: 50px;
+            height: 1200px;
+            width: 100%;
+            border: 1px solid #EEEEEE;
+            /*background-color: #e5dfee;*/
+            box-shadow: 5px 5px 10px #EEEEEE;
+            padding: 50px;
+        }
+
+        #user-fa {
+            display: inline-block;
+            width: 36px;
+            height: 36px;
+            border: 1px solid #EEEEEE;
+            background-color: #5171ee;
+            box-shadow: 1px 1px 5px;
+            border-radius: 18px;
+            text-align: center;
+        }
+
+        #user-fa > i {
+            font-size: 20px;
+            margin-top: 5px;
+        }
+
+        #user > a {
+            padding-top: 5px;
+            text-decoration: none;
+        }
+
+        .edit > a {
+            color: #000000;
+            margin: 2px;
+        }
+
+        .edit > a:hover {
+            color: #999999;
+            background-color: #D9EDF7;
+        }
+
+        #message {
+            width: 100%;
+            height: 100px;
+
+        }
+
+        .btn-success {
+            float: right;
+        }
+
+        .middle-out {
+            height: 150px;
+            width: 100%;
+        }
+
+        .middle {
+            height: 80px;
+            width: 100%;
+            border: 1px solid #EEEEEE;
+        }
+
+        .middle-name {
+            font-family: 宋体;
+            font-size: 18px;
+            align-content: center;
+            font-weight: bold;
+        }
+
+        .middle-date {
+            font-family: 宋体;
+            font-size: 18px;
+            margin-left: 20px;
+        }
+    </style>
+    <script>
+        function tab() {
+            document.getElementById("message").focus();
+        }
+    </script>
+</head>
+<body class="hold-transition skin-red sidebar-mini" ng-app="overdue" ng-controller="commentsController" ng-init="findAssignDetail()">
+<div style="background-color: #afe7ff;font-family: 黑体;font-size:22px;text-align: center">
+    留言界面
+</div>
+<table class="table table-bordered table-striped table-hover dataTable">
+    <thead>
+    <th style="text-align: center">
+        负责的课程
+    </th>
+    <th style="text-align: center">
+        所负责的学生
+    </th>
+    </thead>
+    <tbody>
+    <tr ng-repeat="assignDetail in assignDetails">
+        <td style="text-align: center">
+            {{assignDetail.couName}}
+        </td>
+        <td>
+            <span ng-repeat="student in assignDetail.students">
+                <button type="button" ng-click="replay(student.stuId,student.stuName)" class="btn btn-link">
+                    回复<span style="color: red">[{{student.stuName}}]</span>同学
+                </button>&nbsp;&nbsp;&nbsp;
+            </span>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<!--<div class="container">-->
+<div class="talkyoung">
+    <div class="row">
+        <div class="liuyan">
+            <!--<div>-->
+                <!--<span style="font-size:17px">选择学生进行回复</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span>-->
+                <!--<span ng-repeat="assignDetail in assignDetails">-->
+                    <!--<button type="button" class="btn btn-primary" ng-repeat="student in assignDetail.students">回复&nbsp;<span style="color: #e7e2ee;">[{{student.stuName}}]</span>&nbsp;同学</button>-->
+                <!--</span>-->
+            <!--</div>-->
+            <!--<br>-->
+            <!--<br>-->
+            <div id="user">
+                <span class="glyphicon glyphicon-user" style="padding-left: 20px;"></span>
+                <span href="#" id="usename">[ <span style="color: red">{{name}}</span> ]老师请开始你的表演</span>
+                <span ng-if="stuId != null" style="margin-left: 30px">当前对[ <span style="color: red">{{stuName}}</span> ] 同学进行回复</span>
+            </div>
+            <div>
+                <div class="content">
+                    <input id="message" class="text-success" type="text" ng-model="textContent">
+                    <!--<textarea name="a" id="message">请在这里填写你的疑惑和回复。talkyoung万岁！</textarea>-->
+                    <button id="btn" class="btn btn-success" ng-click="sendComment(textContent,stuId)">发表</button>
+                </div>
+            </div>
+
+            <div class="middle-out" ng-repeat="comment in comments">
+                <div class="middle-detail">
+                    <span class="middle-name" ng-if="comment.comJudge == 1" style="color: red;font-weight: bold">
+                        [ {{comment.comStuname}} ] 同学
+                        <span style="color:black">回复 [{{name}}] 教师</span>
+                    </span>
+                    <span class="middle-name" ng-if="comment.comJudge == 2">
+                        [{{name}}] 老师 回复
+                        <span style="color: red;font-weight: bold">[ {{comment.comStuname}} ] 同学</span>
+                    </span>
+                    <span class="middle-date">{{comment.comDate}}</span>
+                </div>
+                <div class="middle">
+                    {{comment.comContent}}
+                </div>
+                <div ng-if="comment.comJudge==1">
+                    <button type="button" class="btn btn-primary" onclick="tab()" ng-click="replay(comment.comStuid,comment.comStuname)">回复
+                    </button>
+                </div>
+                <div ng-if="comment.comJudge==2">
+                    <button type="button" class="btn btn-danger" ng-click="deleteReply(comment.comId)">删除此留言</button>
+                </div>
+            </div>
+            <tm-pagination conf="paginationConf"></tm-pagination>
+        </div>
+    </div>
+</div>
+</body>
+</html>

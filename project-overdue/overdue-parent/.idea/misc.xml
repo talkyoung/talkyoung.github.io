@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$/overdue-controller" />
+    <file type="web" url="file://$PROJECT_DIR$/overdue-role" />
+    <file type="web" url="file://$PROJECT_DIR$/overdue-service" />
+    <file type="web" url="file://$PROJECT_DIR$/overdue-student" />
+    <file type="web" url="file://$PROJECT_DIR$/overdue-test1" />
+    <file type="web" url="file://$PROJECT_DIR$/talkyoung" />
+    <file type="web" url="file://$PROJECT_DIR$/talkyoungtest" />
+  </component>
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/overdue-pojo/pom.xml" />
+      </list>
+    </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/overdue-controller/pom.xml" />
+        <option value="$PROJECT_DIR$/overdue-service/pom.xml" />
+        <option value="$PROJECT_DIR$/overdue-teacher/pom.xml" />
+        <option value="$PROJECT_DIR$/overdue-test/pom.xml" />
+        <option value="$PROJECT_DIR$/overdue-test1/overdue-teacher/pom.xml" />
+        <option value="$PROJECT_DIR$/overdue-test1/pom.xml" />
+        <option value="$PROJECT_DIR$/test/pom.xml" />
+      </set>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="false" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
+</project>

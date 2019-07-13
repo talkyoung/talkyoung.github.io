@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+			 xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			 xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+
+	<http pattern="/teacher_login.jsp" security="none" />
+	<http pattern="/css/**" security="none" />
+	<http pattern="/images/**" security="none" />
+	<http pattern="/js/**" security="none" />
+	<http pattern="/plugins/**" security="none" />
+	<!-- <http pattern="/jsp/**" security="none"/> -->
+
+	<http use-expressions="false">
+		<intercept-url pattern="/**" access="ROLE_TEACHER" />
+		<form-login login-page="/teacher_login.jsp"
+					default-target-url="/index.jsp" always-use-default-target="true"
+					authentication-failure-url="/teacher_login.jsp" />
+		<csrf disabled="true" />
+		<headers>
+			<frame-options policy="SAMEORIGIN" />
+		</headers>
+		<logout logout-url="" />
+	</http>
+
+
+	<!-- 
+	<http use-expressions="false">
+		<intercept-url pattern="/**" access="ROLE_STUDENT" />
+		<form-login login-page="/student_login.jsp"
+			default-target-url="/admin/student.jsp" always-use-default-target="true"
+			authentication-failure-url="/student_login.jsp" />
+		<csrf disabled="true" />
+		<headers>
+			<frame-options policy="SAMEORIGIN" />
+		</headers>
+		<logout />
+	</http>
+	 -->
+
+	<!-- 配置认证管理器 -->
+	<authentication-manager>
+		<authentication-provider user-service-ref="teacherDetailService">
+		</authentication-provider>
+
+	</authentication-manager>
+	<beans:bean id="teacherService"
+				class="cn.sjxy.overdue.teacher.service.TeacherServiceImpl"></beans:bean>
+
+	<beans:bean id="teacherDetailService"
+				class="cn.sjxy.overdue.teacher.service.TeacherDetailServiceImpl">
+		<beans:property name="teacherServiceImpl" ref="teacherService"></beans:property>
+	</beans:bean>
+	<!-- 
+	<authentication-provider user-service-ref="userDetailService2">
+		</authentication-provider>
+	<beans:bean id="studentService"
+		class="cn.sjxy.overdue.service.impl.StudentServiceImpl"></beans:bean>
+
+	<beans:bean id="userDetailService2"
+		class="cn.sjxy.overdue.service.impl.UserDetailServiceImpl2">
+		<beans:property name="studentService" ref="studentService"></beans:property>
+	</beans:bean>
+	 -->
+
+
+
+</beans:beans>

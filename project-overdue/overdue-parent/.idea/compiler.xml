@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="overdue-dao" />
+        <module name="overdue-pojo" />
+        <module name="overdue-role" />
+        <module name="overdue-student" />
+        <module name="talkyoung" />
+        <module name="talkyoungtest" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel target="1.8">
+      <module name="overdue-service" target="1.7" />
+      <module name="overdue-test1" target="1.7" />
+      <module name="overdueteacher" target="1.7" />
+      <module name="test" target="1.5" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

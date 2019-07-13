@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>管理</title>
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="/plugins/angularjs/angular.min.js"></script>
+
+    <!-- 分页组件开始 -->
+    <script src="../plugins/angularjs/pagination.js"></script>
+    <link rel="stylesheet" href="../plugins/angularjs/pagination.css">
+    <!-- 分页组件结束 -->
+
+
+    <script type="text/javascript" src="/js/base_pagination.js"></script>
+    <script type="text/javascript" src="/js/service/studentServiceByTalkyoung.js"></script>
+    <script type="text/javascript" src="/js/controller/baseController.js"></script>
+    <script type="text/javascript" src="/js/controller/studentControllerByTalkyoung.js"></script>
+    <style type="text/css">
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        #user-fa > i {
+            font-size: 20px;
+            margin-top: 5px;
+        }
+
+        #user > a {
+            padding-top: 5px;
+            text-decoration: none;
+        }
+
+        .edit > a {
+            color: #000000;
+            margin: 2px;
+        }
+
+        .edit > a:hover {
+            color: #999999;
+            background-color: #D9EDF7;
+        }
+
+        #message {
+            width: 100%;
+            height: 100px;
+
+        }
+    </style>
+    <script>
+        function tab() {
+            document.getElementById("message").focus();
+        }
+    </script>
+</head>
+<body class="hold-transition skin-red sidebar-mini" ng-app="overdue" ng-controller="studentControllerByTalkyoung"
+      ng-init="findAllCourse();getStuName();findTeaAndCou()">
+<table class="table table-bordered table-striped table-hover dataTable">
+    <thead style="text-align:center;vertical-align:middle;">
+    <tr>
+        <td style="font-size:20px;width: 50%" class="active">
+            [ {{name}} ]同学你好，您以下几门课程没通过！
+        </td>
+        <td style="font-size:20px" class="active">
+            <!--<button ng-click="showVideo(teacherIdList.teaId)">查看教师视频资料</button>-->
+            授课教师
+        </td>
+    </tr>
+    </thead>
+    <tbody style="text-align:center;vertical-align:middle;">
+    <tr ng-repeat="entity in teaAndCous">
+        <td style="text-align: center">
+            {{entity.courseName}}
+        </td>
+        <td style="text-align: center" ng-if="entity.teacherId != null">
+            <button type="button" class="btn btn-link" ng-click="showVideo(entity.teacherId,entity.courseId,entity.teacherName)">查看[ {{entity.teacherName}} ]老师视频资料</button>
+        </td>
+        <td style="text-align: center" ng-if="entity.teacherId == null">
+            <button type="button" class="btn btn-link" ng-click="showVideo1()">尚未分配教师</button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div style="font-size: 22px;text-align: center">学习视频播放区域</div>
+<div style="align-content: center">
+    <table class="table">
+        <th style="text-align:center;font-size: 18px;width: 25%">视频介绍</th>
+        <th style="text-align:center;font-size: 18px;width: 25%">视频</th>
+        <th style="text-align:center;font-size: 18px;width: 25%">上传时间</th>
+        <th style="text-align:center;font-size: 18px;width: 25%">操作</th>
+        <tr ng-repeat="video in videoList" style="text-align:center" ng-if="videoList.length != 0">
+            <td>
+               {{video.vDetail}}
+            </td>
+            <td style="text-align:center;vertical-align:middle;">
+                <video width="500" height="250" controls="controls">
+                    <source src="{{videoUrl(video.vName)}}" type="video/mp4">
+                    您的浏览器不支持此种视频格式。
+                </video>
+            </td>
+            <td>
+                {{video.vUptime}}
+            </td>
+            <td>
+                <a href="{{video.vName}}" download="{{video.vName}}">点击下载</a>
+            </td>
+        </tr>
+
+    </table>
+</div>
+<div ng-if="judgeteaId == 1" style="text-align: center;font-size: 20px;color: red">
+    请点击右上角超链接查看授课教师的学习文件.
+</div>
+<div style="text-align:center" ng-if="videoList.length == 0&&judgeteaId == 2">
+        等待课程任务的分配。
+</div>
+</body>
+</html>

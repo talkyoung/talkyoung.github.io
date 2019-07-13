@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.sjxy.overdue.dao.StudentMapper" >
+  <resultMap id="BaseResultMap" type="cn.sjxy.overdue.pojo.Student" >
+    <id column="stu_id" property="stuId" jdbcType="INTEGER" />
+    <result column="stu_name" property="stuName" jdbcType="VARCHAR" />
+    <result column="stu_password" property="stuPassword" jdbcType="VARCHAR" />
+    <result column="stu_course_id" property="stuCourseId" jdbcType="VARCHAR" />
+    <result column="stu_teacher_id" property="stuTeacherId" jdbcType="VARCHAR" />
+    <result column="stu_status" property="stuStatus" jdbcType="INTEGER" />
+    <result column="stu_phone" property="stuPhone" jdbcType="VARCHAR" />
+    <result column="stu_profession_id" property="stuProfessionId" jdbcType="VARCHAR" />
+    <result column="stu_department_id" property="stuDepartmentId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    stu_id, stu_name, stu_password, stu_course_id, stu_teacher_id, stu_status, stu_phone, 
+    stu_profession_id, stu_department_id
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="cn.sjxy.overdue.pojo.StudentExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from student
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from student
+    where stu_id = #{stuId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from student
+    where stu_id = #{stuId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="cn.sjxy.overdue.pojo.StudentExample" >
+    delete from student
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="cn.sjxy.overdue.pojo.Student" >
+    insert into student (stu_id, stu_name, stu_password, 
+      stu_course_id, stu_teacher_id, stu_status, 
+      stu_phone, stu_profession_id, stu_department_id
+      )
+    values (#{stuId,jdbcType=INTEGER}, #{stuName,jdbcType=VARCHAR}, #{stuPassword,jdbcType=VARCHAR}, 
+      #{stuCourseId,jdbcType=VARCHAR}, #{stuTeacherId,jdbcType=VARCHAR}, #{stuStatus,jdbcType=INTEGER}, 
+      #{stuPhone,jdbcType=VARCHAR}, #{stuProfessionId,jdbcType=VARCHAR}, #{stuDepartmentId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.sjxy.overdue.pojo.Student" >
+    insert into student
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="stuId != null" >
+        stu_id,
+      </if>
+      <if test="stuName != null" >
+        stu_name,
+      </if>
+      <if test="stuPassword != null" >
+        stu_password,
+      </if>
+      <if test="stuCourseId != null" >
+        stu_course_id,
+      </if>
+      <if test="stuTeacherId != null" >
+        stu_teacher_id,
+      </if>
+      <if test="stuStatus != null" >
+        stu_status,
+      </if>
+      <if test="stuPhone != null" >
+        stu_phone,
+      </if>
+      <if test="stuProfessionId != null" >
+        stu_profession_id,
+      </if>
+      <if test="stuDepartmentId != null" >
+        stu_department_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="stuId != null" >
+        #{stuId,jdbcType=INTEGER},
+      </if>
+      <if test="stuName != null" >
+        #{stuName,jdbcType=VARCHAR},
+      </if>
+      <if test="stuPassword != null" >
+        #{stuPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="stuCourseId != null" >
+        #{stuCourseId,jdbcType=VARCHAR},
+      </if>
+      <if test="stuTeacherId != null" >
+        #{stuTeacherId,jdbcType=VARCHAR},
+      </if>
+      <if test="stuStatus != null" >
+        #{stuStatus,jdbcType=INTEGER},
+      </if>
+      <if test="stuPhone != null" >
+        #{stuPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="stuProfessionId != null" >
+        #{stuProfessionId,jdbcType=VARCHAR},
+      </if>
+      <if test="stuDepartmentId != null" >
+        #{stuDepartmentId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="cn.sjxy.overdue.pojo.StudentExample" resultType="java.lang.Integer" >
+    select count(*) from student
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update student
+    <set >
+      <if test="record.stuId != null" >
+        stu_id = #{record.stuId,jdbcType=INTEGER},
+      </if>
+      <if test="record.stuName != null" >
+        stu_name = #{record.stuName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.stuPassword != null" >
+        stu_password = #{record.stuPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="record.stuCourseId != null" >
+        stu_course_id = #{record.stuCourseId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.stuTeacherId != null" >
+        stu_teacher_id = #{record.stuTeacherId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.stuStatus != null" >
+        stu_status = #{record.stuStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.stuPhone != null" >
+        stu_phone = #{record.stuPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.stuProfessionId != null" >
+        stu_profession_id = #{record.stuProfessionId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.stuDepartmentId != null" >
+        stu_department_id = #{record.stuDepartmentId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update student
+    set stu_id = #{record.stuId,jdbcType=INTEGER},
+      stu_name = #{record.stuName,jdbcType=VARCHAR},
+      stu_password = #{record.stuPassword,jdbcType=VARCHAR},
+      stu_course_id = #{record.stuCourseId,jdbcType=VARCHAR},
+      stu_teacher_id = #{record.stuTeacherId,jdbcType=VARCHAR},
+      stu_status = #{record.stuStatus,jdbcType=INTEGER},
+      stu_phone = #{record.stuPhone,jdbcType=VARCHAR},
+      stu_profession_id = #{record.stuProfessionId,jdbcType=VARCHAR},
+      stu_department_id = #{record.stuDepartmentId,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.sjxy.overdue.pojo.Student" >
+    update student
+    <set >
+      <if test="stuName != null" >
+        stu_name = #{stuName,jdbcType=VARCHAR},
+      </if>
+      <if test="stuPassword != null" >
+        stu_password = #{stuPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="stuCourseId != null" >
+        stu_course_id = #{stuCourseId,jdbcType=VARCHAR},
+      </if>
+      <if test="stuTeacherId != null" >
+        stu_teacher_id = #{stuTeacherId,jdbcType=VARCHAR},
+      </if>
+      <if test="stuStatus != null" >
+        stu_status = #{stuStatus,jdbcType=INTEGER},
+      </if>
+      <if test="stuPhone != null" >
+        stu_phone = #{stuPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="stuProfessionId != null" >
+        stu_profession_id = #{stuProfessionId,jdbcType=VARCHAR},
+      </if>
+      <if test="stuDepartmentId != null" >
+        stu_department_id = #{stuDepartmentId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where stu_id = #{stuId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.sjxy.overdue.pojo.Student" >
+    update student
+    set stu_name = #{stuName,jdbcType=VARCHAR},
+      stu_password = #{stuPassword,jdbcType=VARCHAR},
+      stu_course_id = #{stuCourseId,jdbcType=VARCHAR},
+      stu_teacher_id = #{stuTeacherId,jdbcType=VARCHAR},
+      stu_status = #{stuStatus,jdbcType=INTEGER},
+      stu_phone = #{stuPhone,jdbcType=VARCHAR},
+      stu_profession_id = #{stuProfessionId,jdbcType=VARCHAR},
+      stu_department_id = #{stuDepartmentId,jdbcType=VARCHAR}
+    where stu_id = #{stuId,jdbcType=INTEGER}
+  </update>
+</mapper>

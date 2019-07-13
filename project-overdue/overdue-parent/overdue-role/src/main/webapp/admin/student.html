@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>管理</title>
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="../plugins/angularjs/angular.min.js"></script>
+    <!-- 分页组件开始 -->
+    <script src="../plugins/angularjs/pagination.js"></script>
+    <link rel="stylesheet" href="../plugins/angularjs/pagination.css">
+    <!-- 分页组件结束 -->
+
+
+    <script type="text/javascript" src="../js/base_pagination.js"></script>
+    <script type="text/javascript" src="../js/service/studentService.js"></script>
+    <script type="text/javascript" src="../js/controller/baseController.js"></script>
+    <script type="text/javascript" src="../js/controller/studentController.js"></script>
+
+</head>
+<body class="hold-transition skin-red sidebar-mini" ng-app="overdue" ng-controller="studentController">
+
+<div class="box-body">
+
+    <!-- 数据表格 -->
+    <div class="table-box">
+
+        <!--工具栏-->
+        <div class="pull-left">
+            <div class="form-group form-inline">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default" title="新建" data-toggle="modal"
+                            data-target="#editModal" ng-click="entity={}"><i class="fa fa-file-o"></i> 添加学生
+                    </button>
+                    <button type="button" class="btn btn-default" title="删除" ng-click="dele()"><i
+                            class="fa fa-trash-o"></i> 删除
+                    </button>
+                    <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i
+                            class="fa fa-refresh"></i> 刷新
+                    </button>
+                    <button type="button" class="btn btn-default" title="新建" data-toggle="modal"
+                            data-target="#editModal1"><i class="fa fa-file-o"></i> 从excel导入数据
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="box-tools pull-right">
+            <div class="has-feedback">
+            </div>
+        </div>
+        <!--工具栏/-->
+
+        <!--数据列表-->
+        <table id="dataList" class="table table-bordered table-striped table-hover dataTable">
+            <thead>
+            <tr>
+                <th class="" style="padding-right:0px">
+                    <input id="selall" type="checkbox" class="icheckbox_square-blue">
+                </th>
+                <th class="sorting">姓名</th>
+                <th class="sorting">课程号</th>
+                <th class="sorting">任课老师</th>
+                <th class="sorting">手机号码</th>
+                <th class="sorting">专业名称</th>
+                <th class="sorting">所属院系</th>
+
+                <th class="text-center">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="entity in list">
+                <td><input type="checkbox" ng-click="updateSelection($event,entity.stuId)"></td>
+                <td>{{entity.stuName}}</td>
+                <td>{{entity.stuCourseId}}</td>
+                <td ng-if="entity.stuTeacherId != null">{{entity.stuTeacherId}}</td>
+                <td ng-if="entity.stuTeacherId == null">尚未分配教师。</td>
+                <td>{{entity.stuPhone}}</td>
+                <td>{{entity.stuProfessionId}}</td>
+                <td>{{entity.stuDepartmentId}}</td>
+
+                <td class="text-center">
+                    <button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#editModal"
+                            ng-click="findOne(entity.stuId)">修改
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <!--数据列表/-->
+    </div>
+    <!-- 数据表格 /-->
+    <!-- 分页 -->
+    <tm-pagination conf="paginationConf"></tm-pagination>
+</div>
+<!-- /.box-body -->
+<div class="modal fade" id="editModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p style="font-size: 20px">
+                    选择excel文件进行导入
+                </p>
+            </div>
+            <div class="modal-body">
+                <table>
+                    <tr>
+                        <td>
+                            <input type="file" name="file" id="file"/>
+                            <button class="btn btn-primary" type="button" ng-click="uploadFile()"
+                                    style="margin-left: 400px">
+                                上传
+                            </button>
+                        </td>
+                        <td>
+                            <button class="btn btn-default" data-dismiss="modal" aria-hidden="true"
+                                    style="margin-left: 10px;padding-top: 20px;">关闭
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+                <!-- <form action="/teacherExcel/importTea" method="post" enctype="multipart/form-data">
+                     <input type="file" name="file">
+                     <input type="submit" value="上传">
+                 </form>-->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 编辑窗口 -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">修改学生</h3>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered table-striped" width="800px">
+                    <tr>
+
+                        <td>姓名</td>
+
+                        <td><input class="form-control" ng-model="entity.stuName" placeholder=""></td>
+
+                    </tr>
+                    <tr>
+
+                        <td>密码</td>
+
+                        <td><input class="form-control" ng-model="entity.stuPassword" placeholder=""></td>
+
+                    </tr>
+                    <tr>
+
+                        <td>课程号</td>
+
+                        <td><input class="form-control" ng-model="entity.stuCourseId" placeholder=""></td>
+
+                    </tr>
+                    <tr>
+
+                        <td>手机号</td>
+
+                        <td><input class="form-control" ng-model="entity.stuPhone" placeholder=""></td>
+
+                    </tr>
+                    <tr>
+
+                        <td>专业名称</td>
+
+                        <td><input class="form-control" ng-model="entity.stuProfessionId" placeholder=""></td>
+
+                    </tr>
+                    <tr>
+
+                        <td>所属院系</td>
+
+                        <td><input class="form-control" ng-model="entity.stuDepartmentId" placeholder=""></td>
+
+                    </tr>
+
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" data-dismiss="modal" aria-hidden="true" ng-click="save()">保存</button>
+                <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

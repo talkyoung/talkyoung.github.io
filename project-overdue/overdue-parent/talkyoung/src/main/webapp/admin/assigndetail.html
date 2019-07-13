@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>管理</title>
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="../plugins/angularjs/angular.min.js"></script>
+
+    <script type="text/javascript" src="../js/base.js"></script>
+    <script type="text/javascript" src="../js/service/uploadService.js"></script>
+    <script type="text/javascript" src="../js/controller/baseController.js"></script>
+    <script type="text/javascript" src="../js/controller/uploadController.js"></script>
+
+</head>
+<body class="hold-transition skin-red sidebar-mini" ng-app="overdue" ng-controller="uploadController"
+      ng-init="findAssignDetail()">
+<table class="table table-bordered table-striped table-hover dataTable">
+    <thead>
+    <th style="text-align: center">
+        课程
+    </th>
+    <th style="text-align: center">
+        学生名单
+    </th>
+    </thead>
+    <tbody>
+    <tr ng-repeat="assignDetail in assignDetails">
+        <td style="text-align: center">
+            {{assignDetail.couName}}
+        </td>
+        <td>
+            <span ng-repeat="student in assignDetail.students">{{student.stuName}}&nbsp;&nbsp;&nbsp;</span>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<h1 style="text-align: center;font-weight: bold">请点击以下链接上传资料</h1>
+<div ng-repeat="assignDetail in assignDetails" style="font-size: 20px;text-align: center">
+    <button type="button" class="btn btn-link" ng-click="findVideoByCouId(assignDetail.couId,assignDetail.couName)"><a
+            href="">点击为<span
+            style="color: red">{{assignDetail.couName}}</span>课程上传视频资料</a></button>
+    <button type="button" class="btn btn-link" ng-click="findFileByCouId(assignDetail.couId,assignDetail.couName)"><a
+            href="">点击为<span
+            style="color: red">{{assignDetail.couName}}</span>课程上传文件资料</a></button>
+</div>
+
+<div ng-if="courseId!=0&&judgeVorF==1">
+    <br/>
+    <div class="box-header with-border" style="text-align: center;">
+        <h3 class="box-title" style="font-size: 22px;font-family: 黑体;color: black;">
+            [ <span style="font-weight: bold;color: red">{{courseName}}</span> ]课程视频资源管理</h3>
+    </div>
+    <div class="box-body" style="text-align: center">
+        <div class="btn-group">
+            <button type="button" class="btn btn-default" title="新建" data-toggle="modal"
+                    data-target="#editModal1" ng-click="entity={}"><i class="fa fa-file-o"></i> 点击上传资源
+            </button>
+            <button type="button" class="btn btn-default" title="删除" ng-click="deleMultiVodeo();findVideoByCouId(courseId,courseName)"><i
+                    class="fa fa-trash-o"></i> 批量删除
+            </button>
+            <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i
+                    class="fa fa-refresh"></i> 刷新
+            </button>
+            <button type="button" class="btn btn-default">
+                <a href="comments.html" style="color: black">点击跳转到留言界面</a>
+            </button>
+        </div>
+        <table id="dataList" class="table table-bordered table-striped table-hover dataTable">
+            <thead>
+            <tr>
+                <th class="" style="text-align: center;padding-right:0px;width: 8%">
+                    <input id="selall" type="checkbox" class="icheckbox_square-blue" ng-click="selectAllCheck($event)">
+                </th>
+                <th class="sorting" style="text-align: center;width: 23%">视频介绍</th>
+                <th class="sorting" style="text-align: center;width: 23%">视频</th>
+                <th class="sorting" style="text-align: center;width: 23%">上传时间</th>
+                <th class="sorting" style="text-align: center;width: 23%">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="entity in videosByCourse">
+                <td><input type="checkbox" ng-click="updateSelection($event,entity.vId)" ng-checked="flag"></td>
+                <td>{{entity.vDetail}}</td>
+                <td>
+                    <video width="500" height="250" controls="controls">
+                        <source src="{{videoUrl(entity.vName)}}" type="video/mp4">
+                        您的浏览器不支持此种视频格式。
+                    </video>
+                </td>
+                <td>{{entity.vUptime}}</td>
+                <td>
+                    <button type="button" ng-click="deleteVideoById(entity.vId);findVideoByCouId(courseId,courseName)">
+                        删除
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<!--弹出框-->
+<div class="modal fade" id="editModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">上传视频界面</h3>
+            </div>
+            <span class="modal-body">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <td>
+                            <!--<form action="/upload.do" enctype="multipart/form-data" method="post">
+                                <input type="hidden" name="courseId" value="{{courseId}}"/>
+                                <input type="file" name="file1"/><br>
+                                视频介绍：<input style="width: 300px;height: 50px" type="text" name="videoDetail"><br>
+                                <div style="padding-left: 500px">
+                                    <input type="submit" value="上传">
+                                </div>
+                            </form>-->
+                            <input type="hidden" name="courseId" id="courseId" value="{{courseId}}"/>
+                            <input type="file" id="file"/><br>
+                            <span ng-if="judgeVorF==1">
+                            视频
+                            </span>
+                            <span ng-if="judgeVorF==2">
+                                文件
+                            </span>
+                            介绍：<input style="width: 300px;height: 50px" type="text" name="videoDetail"
+                                      id="videoDetail"><br>
+                            <button class="btn btn-primary" type="button" ng-click="uploadFile()"
+                                    style="margin-left: 500px">
+                                上传
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </span>
+            <div class="modal-footer">
+                <span ng-if="judgeVorF==1">
+                    <button class="btn btn-success" data-dismiss="modal" aria-hidden="true"
+                                     ng-click="findVideoByCouId(courseId,courseName)">保存
+                    </button>
+                </span>
+                <span ng-if="judgeVorF==1">
+                    <button class="btn btn-default" data-dismiss="modal" aria-hidden="true"
+                                   ng-click="findVideoByCouId(courseId,courseName)">关闭
+                    </button>
+                </span>
+                <span ng-if="judgeVorF==2">
+                    <button class="btn btn-success" data-dismiss="modal" aria-hidden="true"
+                            ng-click="findFileByCouId(courseId,courseName)">保存
+                    </button>
+                </span>
+                <span ng-if="judgeVorF==2">
+                    <button class="btn btn-default" data-dismiss="modal" aria-hidden="true"
+                            ng-click="findFileByCouId(courseId,courseName)">关闭
+                    </button>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div ng-if="courseId!=0&&judgeVorF==2">
+    <br/>
+    <div class="box-header with-border" style="text-align: center;">
+        <h3 class="box-title" style="font-size: 22px;font-family: 黑体;color: black;">
+            [ <span style="font-weight: bold;color: red">{{courseName}}</span> ]课程文件资源管理</h3>
+    </div>
+    <div class="box-body" style="text-align: center">
+        <div class="btn-group">
+            <button type="button" class="btn btn-default" title="新建" data-toggle="modal"
+                    data-target="#editModal1" ng-click="entity={}"><i class="fa fa-file-o"></i> 点击上传资源
+            </button>
+            <button type="button" class="btn btn-default" title="删除" ng-click="deleMultiFile();findFileByCouId(courseId,courseName)"><i
+                    class="fa fa-trash-o"></i> 批量删除
+            </button>
+            <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i
+                    class="fa fa-refresh"></i> 刷新
+            </button>
+            <button type="button" class="btn btn-default">
+                <a href="comments.html" style="color: black">点击跳转到留言界面</a>
+            </button>
+        </div>
+        <table id="dataList1" class="table table-bordered table-striped table-hover dataTable">
+            <thead style="text-align: center">
+            <tr>
+                <th class="" style="padding-right:0px;text-align: center">
+                    <input id="selall1" type="checkbox" class="icheckbox_square-blue" ng-click="selectAllCheck($event)">
+                </th>
+                <th class="sorting" style="text-align: center">文件名称</th>
+                <th class="sorting" style="text-align: center">上传时间</th>
+                <th class="sorting" style="text-align: center">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="entity in filesByCourse">
+                <td><input type="checkbox" ng-click="updateSelection($event,entity.fId)" ng-checked="flag"></td>
+                <td>{{entity.fRealname}}</td>
+                <td>{{entity.fUptime}}</td>
+                <td>
+                    <button type="button" ng-click="deleteFileById(entity.fId);findFileByCouId(courseId,courseName)">
+                        删除
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+</body>
+</html>
