@@ -1,1 +1,1 @@
-这是talkyoung第一个上传的项目。
+[github上尝试的第一个issue](https://github.com/talkyoung/talkyoung.github.io/issues/1)
